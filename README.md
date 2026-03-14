@@ -84,7 +84,7 @@ Bearbeite `.env` und passe folgende Werte an:
 # Dein LLM-API-Schlüssel (Pflichtfeld)
 LLM_API_KEY=sk-dein-api-schluessel
 
-# Standard: IONOS. Für OpenAI: https://api.openai.com/v1
+# Für IONOS: https://openai.ionos.de/openai  Für OpenAI: https://api.openai.com/v1
 LLM_BASE_URL=https://openai.ionos.de/openai
 
 # Zufällige Sicherheitsschlüssel (Pflichtfelder)
@@ -375,11 +375,7 @@ Diese Konfiguration ist **ausschließlich für lokale Entwicklung und Tests** ge
 - **API-Schlüssel:** Dein LLM-Provider-Schlüssel wird in der lokalen PostgreSQL-Datenbank gespeichert.
 - **Chats:** Alle Konversationen bleiben lokal auf deinem Rechner.
 - **Keine Telemetrie:** Diese Konfiguration sendet keine Nutzungsdaten.
-- **LLM-Anfragen:** Deine Nachrichten werden an den konfigurierten LLM-Provider (z.B. IONOS oder OpenAI) gesendet. Prüfe deren Datenschutzbestimmungen.
-
-### IONOS als datenschutzkonformer Provider
-
-IONOS betreibt seine KI-Dienste in deutschen Rechenzentren und ist DSGVO-konform. Die Daten verlassen die EU nicht. Weitere Informationen: [cloud.ionos.de/ai](https://cloud.ionos.de/ai)
+- **LLM-Anfragen:** Deine Nachrichten werden an den konfigurierten LLM-Provider gesendet. Prüfe deren Datenschutzbestimmungen.
 
 ---
 

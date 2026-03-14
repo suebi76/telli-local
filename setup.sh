@@ -104,7 +104,7 @@ if [ "$EXISTING_SETUP" = "false" ]; then
     log_info "Telli benoetigt einen OpenAI-kompatiblen API-Schluessel."
     echo ""
     echo "Verfuegbare Provider:"
-    echo "  [1] IONOS AI Model Hub (empfohlen - deutsches Rechenzentrum, DSGVO-konform)"
+    echo "  [1] IONOS AI Model Hub"
     echo "      https://cloud.ionos.de/ai"
     echo "  [2] OpenAI (GPT-4, etc.)"
     echo "      https://platform.openai.com"

@@ -138,8 +138,8 @@ if (-not $skipNewSetup) {
     Write-Info "Telli benoetigt einen OpenAI-kompatiblen API-Schluessel."
     Write-Host ""
     Write-Host "Verfuegbare Provider:" -ForegroundColor White
-    Write-Host "  [1] IONOS AI Model Hub (empfohlen - deutsches Rechenzentrum, DSGVO-konform)"
-    Write-Host "      Registrierung: https://cloud.ionos.de/ai"
+    Write-Host "  [1] IONOS AI Model Hub"
+    Write-Host "      https://cloud.ionos.de/ai"
     Write-Host "  [2] OpenAI (GPT-4, etc.)"
     Write-Host "      Registrierung: https://platform.openai.com"
     Write-Host "  [3] Eigener OpenAI-kompatibler Provider"
@@ -152,7 +152,6 @@ if (-not $skipNewSetup) {
         "1" {
             $llmBaseUrl = "https://openai.ionos.de/openai"
             Write-Info "Provider: IONOS AI Model Hub"
-            Write-Info "Erstelle deinen API-Schluessel unter: https://cloud.ionos.de/ai"
         }
         "2" {
             $llmBaseUrl = "https://api.openai.com/v1"
