@@ -31,56 +31,16 @@ const API_KEY_ID_TEXT = 'local';
 const API_KEY_SECRET  = 'telli-local-secret-not-for-production';
 const FULL_API_KEY = `sk-${API_KEY_ID_TEXT}.${API_KEY_SECRET}`;
 
-// LLM model definitions – same IDs in both databases
-const LLM_MODELS = [
-  {
-    id:          'b870b74d-7458-4dcf-99f6-ace83ef514f4',
-    provider:    'ionos',       // owner in dialog DB, provider in api DB
-    name:        'BAAI/bge-m3',
-    displayName: 'BGE-M3 Embedding',
-    description: 'Embedding model for semantic search',
-    type:        'embedding',
-    settings:    { type: 'embedding' },
-    priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
-  },
-  {
-    id:          '7dcb063f-5241-4846-b11f-a621ea1dd4a9',
-    provider:    'ionos',
-    name:        'black-forest-labs/FLUX.1-schnell',
-    displayName: 'FLUX.1 Schnell (Image)',
-    description: 'Fast image generation model',
-    type:        'image',
-    settings:    { type: 'image' },
-    priceMetadata: { costPerImage: 0 },
-  },
-  {
-    id:          '9578ed80-b0c2-4968-b253-d897576e5512',
-    provider:    'ionos',
-    name:        'meta-llama/Llama-3.3-70B-Instruct',
-    displayName: 'Llama 3.3 70B Instruct',
-    description: 'Open-source large language model by Meta',
-    type:        'text',
-    settings:    { type: 'chat' },
-    priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
-  },
+// LLM model – name is read from LLM_CHAT_MODEL env at runtime (see main())
+// IDs are stable UUIDs for this local deployment
+const makeLlmModels = (chatModelName) => [
   {
     id:          '4f8a2c1e-93d7-4b6a-a5e0-d2f1c8b7e3a9',
     provider:    'openai',
-    name:        'gemini-2.5-flash',
-    displayName: 'Gemini 2.5 Flash',
-    description: 'Fast and efficient Gemini model by Google',
+    name:        chatModelName,
+    displayName: chatModelName,
+    description: 'Chat model configured via LLM_CHAT_MODEL',
     type:        'text',
-    settings:    { type: 'chat' },
-    priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
-  },
-  {
-    id:          'e7b3d9f2-1a4c-4e8b-b6d5-f0c2a9e8d1b7',
-    provider:    'openai',
-    name:        'gemini-2.5-pro',
-    displayName: 'Gemini 2.5 Pro',
-    description: 'Powerful Gemini Pro model by Google',
-    type:        'text',
-    settings:    { type: 'chat' },
     priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
   },
 ];
@@ -131,7 +91,7 @@ async function connectWithRetry(url, label, maxRetries = 20, delayMs = 3000) {
 // API DB seeding
 // ---------------------------------------------------------------------------
 
-async function seedApiDb(apiDb, llmApiKey, llmBaseUrl) {
+async function seedApiDb(apiDb, llmApiKey, llmBaseUrl, LLM_MODELS) {
   logSection('Seeding API Database (telli_api_db)');
 
   // 1. Organization
@@ -224,7 +184,7 @@ async function seedApiDb(apiDb, llmApiKey, llmBaseUrl) {
 // Dialog DB seeding
 // ---------------------------------------------------------------------------
 
-async function seedDialogDb(dialogDb) {
+async function seedDialogDb(dialogDb, LLM_MODELS) {
   logSection('Seeding Dialog Database (telli_dialog_db)');
 
   // 1. LLM Models in Dialog DB
@@ -295,10 +255,11 @@ async function seedDialogDb(dialogDb) {
 async function main() {
   logSection('Telli Local Database Seeder');
 
-  const apiDbUrl    = process.env.API_DATABASE_URL;
-  const dialogDbUrl = process.env.DATABASE_URL;
-  const llmApiKey   = process.env.LLM_API_KEY;
-  const llmBaseUrl  = process.env.LLM_BASE_URL || 'https://openai.ionos.de/openai';
+  const apiDbUrl      = process.env.API_DATABASE_URL;
+  const dialogDbUrl   = process.env.DATABASE_URL;
+  const llmApiKey     = process.env.LLM_API_KEY;
+  const llmBaseUrl    = process.env.LLM_BASE_URL;
+  const llmChatModel  = process.env.LLM_CHAT_MODEL || 'gpt-4o-mini';
 
   if (!apiDbUrl) {
     console.error('ERROR: API_DATABASE_URL environment variable is required');
@@ -312,8 +273,15 @@ async function main() {
     console.error('ERROR: LLM_API_KEY environment variable is required');
     process.exit(1);
   }
+  if (!llmBaseUrl) {
+    console.error('ERROR: LLM_BASE_URL environment variable is required');
+    process.exit(1);
+  }
+
+  const LLM_MODELS = makeLlmModels(llmChatModel);
 
   log(`LLM Base URL : ${llmBaseUrl}`);
+  log(`LLM Model    : ${llmChatModel}`);
   log(`LLM API Key  : ${llmApiKey.substring(0, 8)}... (redacted)`);
   log(`Fixed API key: ${FULL_API_KEY}`);
   console.log('');
@@ -331,8 +299,8 @@ async function main() {
     ]);
 
     // Seed both databases
-    await seedApiDb(apiDb, llmApiKey, llmBaseUrl);
-    await seedDialogDb(dialogDb);
+    await seedApiDb(apiDb, llmApiKey, llmBaseUrl, LLM_MODELS);
+    await seedDialogDb(dialogDb, LLM_MODELS);
 
     logSection('Seeding Complete');
     console.log('');

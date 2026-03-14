@@ -12,7 +12,7 @@ Diese Anleitung beschreibt, wie du eine vollständige **Telli**-Instanz lokal au
 - **Lernszenarien** und geteilte Chats im Unterricht
 - **Eigene KI-Personas** (Characters) für pädagogische Zwecke
 - **Bundesland-basierte Konfiguration** mit individuellen Budgets und Funktionen
-- **Mehrere LLM-Provider** (IONOS, OpenAI, etc.) hinter einer einheitlichen API
+- **OpenAI-kompatible LLM-Provider** hinter einer einheitlichen API
 
 ---
 
@@ -84,8 +84,11 @@ Bearbeite `.env` und passe folgende Werte an:
 # Dein LLM-API-Schlüssel (Pflichtfeld)
 LLM_API_KEY=sk-dein-api-schluessel
 
-# Für IONOS: https://openai.ionos.de/openai  Für OpenAI: https://api.openai.com/v1
-LLM_BASE_URL=https://openai.ionos.de/openai
+# Base URL des Providers (OpenAI-kompatibel)
+LLM_BASE_URL=https://api.openai.com/v1
+
+# Name des Modells, das dein Provider unterstützt
+LLM_CHAT_MODEL=gpt-4o-mini
 
 # Zufällige Sicherheitsschlüssel (Pflichtfelder)
 # Linux/Mac: openssl rand -hex 32
@@ -154,17 +157,9 @@ docker compose up -d telli-api telli-dialog telli-admin
 └──────────────────────────────┘
 ```
 
-### LLM-Modelle (vorinstalliert)
+### LLM-Modell
 
-| Modell | Typ | Provider |
-|---|---|---|
-| Llama-3.3-70B-Instruct | Text/Chat | IONOS |
-| gemini-2.5-flash | Text/Chat | OpenAI-kompatibel |
-| gemini-2.5-pro | Text/Chat | OpenAI-kompatibel |
-| FLUX.1-schnell | Bildgenerierung | IONOS |
-| BAAI/bge-m3 | Embedding (RAG) | IONOS |
-
-**Hinweis:** Alle Modelle verwenden deinen konfigurierten LLM-API-Schlüssel und die Base-URL aus der `.env`-Datei. Wenn dein Provider ein bestimmtes Modell nicht unterstützt, wird es im Chat nicht funktionieren.
+Das beim Setup angegebene Modell (`.env`-Variable `LLM_CHAT_MODEL`) wird automatisch eingerichtet. Weitere Modelle können nachträglich über das **Admin-Panel** unter http://localhost:3001 hinzugefügt werden.
 
 ---
 
@@ -210,13 +205,9 @@ Die Rollen werden über Keycloak-Attribute gesteuert. Im lokalen Setup haben all
 Passe in `.env` an:
 
 ```env
-# Für OpenAI:
-LLM_API_KEY=sk-openai-dein-schluessel
-LLM_BASE_URL=https://api.openai.com/v1
-
-# Für IONOS (Standard):
-LLM_API_KEY=dein-ionos-schluessel
-LLM_BASE_URL=https://openai.ionos.de/openai
+LLM_API_KEY=sk-dein-neuer-schluessel
+LLM_BASE_URL=https://api.dein-provider.de/v1
+LLM_CHAT_MODEL=modellname
 ```
 
 Nach Änderung:

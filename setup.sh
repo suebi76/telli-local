@@ -103,33 +103,26 @@ if [ "$EXISTING_SETUP" = "false" ]; then
     log_header "LLM Provider Konfiguration"
     log_info "Telli benoetigt einen OpenAI-kompatiblen API-Schluessel."
     echo ""
-    echo "Verfuegbare Provider:"
-    echo "  [1] IONOS AI Model Hub"
-    echo "      https://cloud.ionos.de/ai"
-    echo "  [2] OpenAI (GPT-4, etc.)"
-    echo "      https://platform.openai.com"
-    echo "  [3] Eigener OpenAI-kompatibler Provider"
+    echo "Verfuegbare Provider (Beispiele):"
+    echo "  [1] OpenAI (https://api.openai.com/v1)"
+    echo "  [2] Eigener OpenAI-kompatibler Provider"
     echo ""
 
-    read -rp "Provider auswaehlen [1-3, Standard: 1]: " provider_choice
+    read -rp "Provider auswaehlen [1-2, Standard: 1]: " provider_choice
     provider_choice="${provider_choice:-1}"
 
     case "$provider_choice" in
         1)
-            LLM_BASE_URL="https://openai.ionos.de/openai"
-            log_info "Provider: IONOS AI Model Hub"
-            ;;
-        2)
             LLM_BASE_URL="https://api.openai.com/v1"
             log_info "Provider: OpenAI"
             ;;
-        3)
+        2)
             read -rp "Base URL deines Providers (z.B. https://mein-provider.de/v1): " LLM_BASE_URL
             log_info "Provider: Benutzerdefiniert ($LLM_BASE_URL)"
             ;;
         *)
-            LLM_BASE_URL="https://openai.ionos.de/openai"
-            log_warn "Ungueltige Auswahl, verwende IONOS als Standard."
+            LLM_BASE_URL="https://api.openai.com/v1"
+            log_warn "Ungueltige Auswahl, verwende OpenAI als Standard."
             ;;
     esac
 
@@ -142,6 +135,11 @@ if [ "$EXISTING_SETUP" = "false" ]; then
         fi
     done
     log_ok "API-Schluessel eingetragen."
+
+    echo ""
+    read -rp "Modellname (z.B. gpt-4o-mini, gpt-4o) [Standard: gpt-4o-mini]: " LLM_CHAT_MODEL
+    LLM_CHAT_MODEL="${LLM_CHAT_MODEL:-gpt-4o-mini}"
+    log_ok "Modell: $LLM_CHAT_MODEL"
 
     # -------------------------------------------------------------------------
     # 4. Sicherheitsschluessel generieren
@@ -169,6 +167,7 @@ if [ "$EXISTING_SETUP" = "false" ]; then
 # LLM Provider
 LLM_API_KEY=${LLM_API_KEY}
 LLM_BASE_URL=${LLM_BASE_URL}
+LLM_CHAT_MODEL=${LLM_CHAT_MODEL}
 
 # Sicherheitsschluessel (automatisch generiert)
 AUTH_SECRET=${AUTH_SECRET}

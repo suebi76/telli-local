@@ -12,7 +12,7 @@
     - Windows 10/11
     - Docker Desktop (laeuft und ist gestartet)
     - Internetverbindung (fuer Docker Images)
-    - API-Schluessel eines LLM-Providers (z.B. IONOS, OpenAI)
+    - API-Schluessel eines OpenAI-kompatiblen LLM-Providers
 #>
 
 Set-StrictMode -Version Latest
@@ -137,33 +137,26 @@ if (-not $skipNewSetup) {
     Write-Header "LLM Provider Konfiguration"
     Write-Info "Telli benoetigt einen OpenAI-kompatiblen API-Schluessel."
     Write-Host ""
-    Write-Host "Verfuegbare Provider:" -ForegroundColor White
-    Write-Host "  [1] IONOS AI Model Hub"
-    Write-Host "      https://cloud.ionos.de/ai"
-    Write-Host "  [2] OpenAI (GPT-4, etc.)"
-    Write-Host "      Registrierung: https://platform.openai.com"
-    Write-Host "  [3] Eigener OpenAI-kompatibler Provider"
+    Write-Host "Verfuegbare Provider (Beispiele):" -ForegroundColor White
+    Write-Host "  [1] OpenAI (https://api.openai.com/v1)"
+    Write-Host "  [2] Eigener OpenAI-kompatibler Provider"
     Write-Host ""
 
-    $providerChoice = Read-Host "Provider auswaehlen [1-3, Standard: 1]"
+    $providerChoice = Read-Host "Provider auswaehlen [1-2, Standard: 1]"
     if ([string]::IsNullOrWhiteSpace($providerChoice)) { $providerChoice = "1" }
 
     switch ($providerChoice) {
         "1" {
-            $llmBaseUrl = "https://openai.ionos.de/openai"
-            Write-Info "Provider: IONOS AI Model Hub"
-        }
-        "2" {
             $llmBaseUrl = "https://api.openai.com/v1"
             Write-Info "Provider: OpenAI"
         }
-        "3" {
+        "2" {
             $llmBaseUrl = Read-Host "Base URL deines Providers (z.B. https://mein-provider.de/v1)"
             Write-Info "Provider: Benutzerdefiniert ($llmBaseUrl)"
         }
         default {
-            $llmBaseUrl = "https://openai.ionos.de/openai"
-            Write-Info "Ungueltige Auswahl, verwende IONOS als Standard."
+            $llmBaseUrl = "https://api.openai.com/v1"
+            Write-Info "Ungueltige Auswahl, verwende OpenAI als Standard."
         }
     }
 
@@ -176,6 +169,11 @@ if (-not $skipNewSetup) {
         }
     }
     Write-OK "API-Schluessel eingetragen."
+
+    Write-Host ""
+    $llmChatModel = Read-Host "Modellname (z.B. gpt-4o-mini, gpt-4o) [Standard: gpt-4o-mini]"
+    if ([string]::IsNullOrWhiteSpace($llmChatModel)) { $llmChatModel = "gpt-4o-mini" }
+    Write-OK "Modell: $llmChatModel"
 
     # -------------------------------------------------------------------------
     # 4. Sicherheitsschluessel generieren
@@ -204,6 +202,7 @@ if (-not $skipNewSetup) {
 # LLM Provider
 LLM_API_KEY=$llmApiKey
 LLM_BASE_URL=$llmBaseUrl
+LLM_CHAT_MODEL=$llmChatModel
 
 # Sicherheitsschluessel (automatisch generiert)
 AUTH_SECRET=$authSecret
