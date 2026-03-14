@@ -85,9 +85,11 @@ Bearbeite `.env` und passe folgende Werte an:
 LLM_API_KEY=sk-dein-api-schluessel
 
 # Base URL des Providers (OpenAI-kompatibel)
+# OpenAI:  https://api.openai.com/v1
+# Gemini:  https://generativelanguage.googleapis.com/v1beta/openai/
 LLM_BASE_URL=https://api.openai.com/v1
 
-# Name des Modells, das dein Provider unterstützt
+# Name des zusätzlichen Modells (Gemini 2.5 Flash/Pro sind bereits eingerichtet)
 LLM_CHAT_MODEL=gpt-4o-mini
 
 # Zufällige Sicherheitsschlüssel (Pflichtfelder)
@@ -157,9 +159,15 @@ docker compose up -d telli-api telli-dialog telli-admin
 └──────────────────────────────┘
 ```
 
-### LLM-Modell
+### LLM-Modelle
 
-Das beim Setup angegebene Modell (`.env`-Variable `LLM_CHAT_MODEL`) wird automatisch eingerichtet. Weitere Modelle können nachträglich über das **Admin-Panel** unter http://localhost:3001 hinzugefügt werden.
+Gemini 2.5 Flash und Gemini 2.5 Pro werden automatisch vorkonfiguriert. Das beim Setup angegebene Modell (`LLM_CHAT_MODEL`) wird ebenfalls eingerichtet, sofern es nicht bereits in der Liste ist. Weitere Modelle können über das **Admin-Panel** unter http://localhost:3001 hinzugefügt werden.
+
+| Modell | Typ |
+|---|---|
+| gemini-2.5-flash | Text/Chat |
+| gemini-2.5-pro | Text/Chat |
+| *(dein LLM_CHAT_MODEL)* | Text/Chat |
 
 ---
 

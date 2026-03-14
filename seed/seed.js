@@ -31,19 +31,45 @@ const API_KEY_ID_TEXT = 'local';
 const API_KEY_SECRET  = 'telli-local-secret-not-for-production';
 const FULL_API_KEY = `sk-${API_KEY_ID_TEXT}.${API_KEY_SECRET}`;
 
-// LLM model – name is read from LLM_CHAT_MODEL env at runtime (see main())
+// LLM models – Gemini models are pre-seeded; additional model from LLM_CHAT_MODEL
 // IDs are stable UUIDs for this local deployment
-const makeLlmModels = (chatModelName) => [
-  {
-    id:          '4f8a2c1e-93d7-4b6a-a5e0-d2f1c8b7e3a9',
-    provider:    'openai',
-    name:        chatModelName,
-    displayName: chatModelName,
-    description: 'Chat model configured via LLM_CHAT_MODEL',
-    type:        'text',
-    priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
-  },
-];
+const makeLlmModels = (chatModelName) => {
+  const models = [
+    {
+      id:          '4f8a2c1e-93d7-4b6a-a5e0-d2f1c8b7e3a9',
+      provider:    'openai',
+      name:        'gemini-2.5-flash',
+      displayName: 'Gemini 2.5 Flash',
+      description: 'Fast and efficient model by Google',
+      type:        'text',
+      priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
+    },
+    {
+      id:          'e7b3d9f2-1a4c-4e8b-b6d5-f0c2a9e8d1b7',
+      provider:    'openai',
+      name:        'gemini-2.5-pro',
+      displayName: 'Gemini 2.5 Pro',
+      description: 'Powerful model by Google',
+      type:        'text',
+      priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
+    },
+  ];
+
+  // Add extra model from LLM_CHAT_MODEL if it's not already in the list
+  if (chatModelName && !models.some((m) => m.name === chatModelName)) {
+    models.push({
+      id:          'a0000000-0000-0000-0000-000000000001',
+      provider:    'openai',
+      name:        chatModelName,
+      displayName: chatModelName,
+      description: 'Custom model configured via LLM_CHAT_MODEL',
+      type:        'text',
+      priceMetadata: { inputCostPer1kTokens: 0, outputCostPer1kTokens: 0 },
+    });
+  }
+
+  return models;
+};
 
 const FEATURE_TOGGLES = {
   isStudentAccessEnabled:          true,

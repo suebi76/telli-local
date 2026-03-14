@@ -137,25 +137,34 @@ if (-not $skipNewSetup) {
     Write-Header "LLM Provider Konfiguration"
     Write-Info "Telli benoetigt einen OpenAI-kompatiblen API-Schluessel."
     Write-Host ""
-    Write-Host "Verfuegbare Provider (Beispiele):" -ForegroundColor White
-    Write-Host "  [1] OpenAI (https://api.openai.com/v1)"
-    Write-Host "  [2] Eigener OpenAI-kompatibler Provider"
+    Write-Host "Verfuegbare Provider:" -ForegroundColor White
+    Write-Host "  [1] OpenAI            https://api.openai.com/v1"
+    Write-Host "  [2] Google Gemini     https://generativelanguage.googleapis.com/v1beta/openai/"
+    Write-Host "  [3] Eigener OpenAI-kompatibler Provider"
     Write-Host ""
 
-    $providerChoice = Read-Host "Provider auswaehlen [1-2, Standard: 1]"
+    $providerChoice = Read-Host "Provider auswaehlen [1-3, Standard: 1]"
     if ([string]::IsNullOrWhiteSpace($providerChoice)) { $providerChoice = "1" }
 
     switch ($providerChoice) {
         "1" {
-            $llmBaseUrl = "https://api.openai.com/v1"
+            $llmBaseUrl     = "https://api.openai.com/v1"
+            $defaultModel   = "gpt-4o-mini"
             Write-Info "Provider: OpenAI"
         }
         "2" {
-            $llmBaseUrl = Read-Host "Base URL deines Providers (z.B. https://mein-provider.de/v1)"
+            $llmBaseUrl     = "https://generativelanguage.googleapis.com/v1beta/openai/"
+            $defaultModel   = "gemini-2.5-flash"
+            Write-Info "Provider: Google Gemini"
+        }
+        "3" {
+            $llmBaseUrl   = Read-Host "Base URL deines Providers (z.B. https://mein-provider.de/v1)"
+            $defaultModel = "gpt-4o-mini"
             Write-Info "Provider: Benutzerdefiniert ($llmBaseUrl)"
         }
         default {
-            $llmBaseUrl = "https://api.openai.com/v1"
+            $llmBaseUrl     = "https://api.openai.com/v1"
+            $defaultModel   = "gpt-4o-mini"
             Write-Info "Ungueltige Auswahl, verwende OpenAI als Standard."
         }
     }
@@ -171,8 +180,8 @@ if (-not $skipNewSetup) {
     Write-OK "API-Schluessel eingetragen."
 
     Write-Host ""
-    $llmChatModel = Read-Host "Modellname (z.B. gpt-4o-mini, gpt-4o) [Standard: gpt-4o-mini]"
-    if ([string]::IsNullOrWhiteSpace($llmChatModel)) { $llmChatModel = "gpt-4o-mini" }
+    $llmChatModel = Read-Host "Modellname [Standard: $defaultModel]"
+    if ([string]::IsNullOrWhiteSpace($llmChatModel)) { $llmChatModel = $defaultModel }
     Write-OK "Modell: $llmChatModel"
 
     # -------------------------------------------------------------------------
