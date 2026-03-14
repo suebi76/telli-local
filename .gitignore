@@ -1,0 +1,20 @@
+# Secrets - never commit these
+.env
+
+# Build artifacts
+seed/node_modules/
+seed/package-lock.json
+
+# Logs
+*.log
+
+# Local Docker volume data (if exported)
+api_key_data/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

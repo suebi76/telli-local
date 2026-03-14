@@ -1,0 +1,10 @@
+{
+  "name": "telli-local-seeder",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "seed.js",
+  "dependencies": {
+    "pg": "^8.13.0",
+    "bcryptjs": "^2.4.3"
+  }
+}
