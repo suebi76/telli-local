@@ -29,7 +29,7 @@ Diese Anleitung beschreibt, wie du eine vollständige **Telli**-Instanz lokal au
 
 ---
 
-## Schnellstart (3 Schritte)
+## Schnellstart
 
 ### Schritt 1: Dateien herunterladen
 
