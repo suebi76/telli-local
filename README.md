@@ -24,7 +24,6 @@ Diese Anleitung beschreibt, wie du eine vollständige **Telli**-Instanz lokal au
 | RAM | 4 GB verfügbar | 8 GB verfügbar |
 | Festplatte | 10 GB frei | 20 GB frei |
 | Software | [Docker Desktop](https://www.docker.com/products/docker-desktop) | Docker Desktop aktuell |
-| Netzwerk | Internetverbindung | stabil |
 
 **Wichtig:** Docker Desktop muss gestartet und betriebsbereit sein, bevor du das Setup ausführst.
 
