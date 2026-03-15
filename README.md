@@ -18,7 +18,7 @@ Diese Anleitung beschreibt, wie du eine vollständige **Telli**-Instanz lokal au
 
 ## Systemvoraussetzungen
 
-| Anforderung | Mindest | Empfohlen |
+| Anforderung | Minimum | Empfohlen |
 |---|---|---|
 | Betriebssystem | Windows 10 (64-bit) | Windows 11 |
 | RAM | 4 GB verfügbar | 8 GB verfügbar |
