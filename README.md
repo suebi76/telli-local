@@ -1,6 +1,6 @@
 # Telli – Lokale Installation
 
-Diese Anleitung beschreibt, wie du eine vollständige **Telli**-Instanz lokal auf deinem Windows-Rechner mit Docker Compose betreiben kannst, **ohne den Quellcode** herunterzuladen.
+Diese Anleitung beschreibt, wie du eine vollständige **Telli**-Instanz lokal auf deinem Windows-Rechner mit Docker Compose betreiben kannst.
 
 ---
 
